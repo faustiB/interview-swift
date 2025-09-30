@@ -8,6 +8,8 @@ final class RecipeListViewModel: ObservableObject {
   private let recipeService: RecipeService
   // To keep subscriptions from combine alive, until the user exists.
   private var cancellables = Set<AnyCancellable>()
+  // Task to perform the search async.
+  private var searchTask: Task<Void, Error>?
   
   // TODO: - #2:  In RecipeListViewModel: publish search results to the RecipeListView using the
   //  RecipeService. The screen should show a blank page when the query is empty, a loading
@@ -22,7 +24,7 @@ final class RecipeListViewModel: ObservableObject {
     
     // Debounced search
     $recipeSearchQuery
-      .debounce(for: 0.3, scheduler: DispatchQueue.main)
+      .debounce(for: .milliseconds(300) , scheduler: DispatchQueue.main)
       .removeDuplicates()
       .sink { [weak self] searchValue in
         self?.searchRecipes(recipeSearchQuery: searchValue)
@@ -51,6 +53,33 @@ final class RecipeListViewModel: ObservableObject {
   }
   
   func searchRecipes(recipeSearchQuery: String){
-    print(recipeSearchQuery)
+    let trimmedSearch = recipeSearchQuery.trimmingCharacters(in: .whitespaces)
+    
+    state = .loading
+
+    //cancel previous ones
+    searchTask?.cancel()
+    searchTask = Task { [recipeService] in
+      do {
+        let search = try await recipeService.searchRecipe(query: trimmedSearch)
+        let recipes = search.recipes
+        let count = search.count
+        
+        print("Recipes: \(recipes)")
+        print("Count: \(count)")
+        
+        await MainActor.run { [weak self] in
+          self?.state = .init(
+            isLoading: false,
+            statusMessage: count == 0 ? "No reults for \(trimmedSearch)" : nil ,
+            recipes: recipes
+          )
+        }
+      } catch let error as RecipeService.APIError {
+        // Could it be an existing issue with the API? when the search matches it returns a 200, but when the query is incomplete or wrong it returns a badrequest error.
+        print(error)
+      }
+      
+    }
   }
 }
