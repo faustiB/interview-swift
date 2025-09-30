@@ -13,8 +13,9 @@ struct RecipeListView: View {
             //  - The view should match the image in screenshots/swiftui_search_results.png
           
           Group {
-            if viewModel.state.isLoading {
-              Text("Loading...")
+            if viewModel.recipeSearchQuery.isEmpty {
+              Color.clear
+            } else if viewModel.state.isLoading {
               ProgressView()
                 .progressViewStyle(.circular)
             } else if viewModel.recipeSearchQuery.isEmpty {
@@ -22,7 +23,9 @@ struct RecipeListView: View {
             } else if let statusMessage = viewModel.state.statusMessage {
               // no search found --> status message
             } else {
-              // returned recipes
+              List (viewModel.state.recipes) { recipe in
+                Text(recipe.title)
+              }
             }
             
           }
