@@ -24,8 +24,8 @@ final class RecipeListViewModel: ObservableObject {
     $recipeSearchQuery
       .debounce(for: 0.3, scheduler: DispatchQueue.main)
       .removeDuplicates()
-      .sink { searchValue in
-        print(searchValue)
+      .sink { [weak self] searchValue in
+        self?.searchRecipes(recipeSearchQuery: searchValue)
       }
       .store(in: &cancellables)
       
@@ -51,6 +51,6 @@ final class RecipeListViewModel: ObservableObject {
   }
   
   func searchRecipes(recipeSearchQuery: String){
-    // search for recipes.
+    print(recipeSearchQuery)
   }
 }
