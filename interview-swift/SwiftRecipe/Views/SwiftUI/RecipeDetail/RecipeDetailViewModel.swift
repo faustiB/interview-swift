@@ -4,13 +4,33 @@ import Foundation
 //TODO: - #4 Implement Details ViewModel using RecipeService
 
 @MainActor
-final class RecipeDetailViewModel {
-    let recipe: Recipe
-    private let service = RecipeService()
+final class RecipeDetailViewModel: ObservableObject {
+  private let recipeId: String
+  private let service: RecipeService
+  
+  @Published var isLoading: Bool = false
+  @Published var recipeDetails: Recipe?
+  
+  init(recipeId: String, service: RecipeService = RecipeService()) {
+    self.recipeId = recipeId
+    self.service = service
+    
+    // Load the recipe details once viewmodel is instantiated
+    Task {
+      await fetchRecipeDetails()
+    }
+  }
 
-    init(recipe: Recipe) {
-        self.recipe = recipe
+  func fetchRecipeDetails() async {
+    isLoading = true
+    do {
+      let recipeFetched = try await service.fetchRecipeDetails(id: recipeId)
+      recipeDetails = recipeFetched
+      isLoading = false
+    } catch {
+      isLoading = false
+      print(error)
     }
     
-    func fetchRecipeDetails() async {}
+  }
 }

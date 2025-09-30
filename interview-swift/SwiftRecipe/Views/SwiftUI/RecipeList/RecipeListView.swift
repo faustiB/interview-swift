@@ -24,7 +24,11 @@ struct RecipeListView: View {
               // no search found --> status message
             } else {
               List (viewModel.state.recipes) { recipe in
-                NavigationLink(destination: RecipeDetailView(viewModel: RecipeDetailViewModel(recipe: recipe))) {
+                NavigationLink {
+                  LazyView {
+                    RecipeDetailView(viewModel: RecipeDetailViewModel(recipeId: recipe.id))
+                  }
+                } label: {
                   RecipelistRow(recipe: recipe)
                 }
               }
@@ -69,6 +73,14 @@ struct RecipelistRow: View {
       }
 
     }
+  }
+}
+
+// MARK: - Helpers -
+struct LazyView <T> : View where T : View {
+  var view: () -> T
+  var body: some View {
+    self.view()
   }
 }
 
