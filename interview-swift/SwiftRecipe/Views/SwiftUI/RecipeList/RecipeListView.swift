@@ -24,7 +24,9 @@ struct RecipeListView: View {
               // no search found --> status message
             } else {
               List (viewModel.state.recipes) { recipe in
-                Text(recipe.title)
+                NavigationLink(destination: RecipeDetailView(viewModel: RecipeDetailViewModel(recipe: recipe))) {
+                  Text(recipe.title)
+                }
               }
             }
             
