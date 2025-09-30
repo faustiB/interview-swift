@@ -25,16 +25,51 @@ struct RecipeListView: View {
             } else {
               List (viewModel.state.recipes) { recipe in
                 NavigationLink(destination: RecipeDetailView(viewModel: RecipeDetailViewModel(recipe: recipe))) {
-                  Text(recipe.title)
+                  RecipelistRow(recipe: recipe)
                 }
               }
+              .listStyle(.plain)
             }
             
           }
           .navigationTitle("Recipes")
-          .searchable(text: $viewModel.recipeSearchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Recipes")
+          .searchable(text: $viewModel.recipeSearchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Recipes...")
+          .searchPresentationToolbarBehavior(.avoidHidingContent)
+          .navigationBarTitleDisplayMode(.automatic)
         }
     }
+}
+
+struct RecipelistRow: View {
+  let recipe: Recipe
+  
+  var body: some View {
+    HStack(spacing: 12) {
+      // Recipe image
+      AsyncImage(url: recipe.imageURL) { image in
+        image
+          .resizable()
+          .scaledToFill()
+      } placeholder: {
+        Image(systemName: "oven.fill")
+          .foregroundColor(.gray)
+      }
+      .frame(width: 50, height: 50)
+      .clipShape(RoundedRectangle(cornerRadius: 6))
+      
+      // Recipe info
+      VStack(alignment: .leading, spacing: 4) {
+        Text(recipe.title)
+          .font(.body)
+          .lineLimit(2)
+        
+        Text(recipe.publisher)
+          .font(.caption)
+        
+      }
+
+    }
+  }
 }
 
 #Preview {
