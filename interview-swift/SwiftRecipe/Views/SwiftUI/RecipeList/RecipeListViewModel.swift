@@ -66,7 +66,7 @@ final class RecipeListViewModel: ObservableObject {
         await MainActor.run { [weak self] in
           self?.state = .init(
             isLoading: false,
-            statusMessage: count == 0 ? "No reults for \(trimmedSearch)" : nil ,
+            statusMessage: count == 0 ? "No results for \(trimmedSearch)" : nil ,
             recipes: recipes
           )
         }
