@@ -17,6 +17,21 @@ struct RecipeDetailView: View {
         EmptyView()
       }
     }
+    .alert("Error", isPresented: $viewModel.isErrorAlertShown) {
+      Button {
+        viewModel.isErrorAlertShown = false
+        Task {
+          await viewModel.fetchRecipeDetails()
+        }
+      } label: {
+        Text("Retry")
+      }
+      
+      Button("Cancel", role: .cancel) {
+        viewModel.isErrorAlertShown = false
+      }
+
+    }
   }
 }
 
@@ -24,40 +39,48 @@ struct RecipeDetailsInfoView: View {
   let recipe: Recipe
   
   var body: some View {
+    
     VStack {
       RecipeHeroImage(recipe: recipe)
       
-      VStack(alignment: .leading) {
-        HStack(alignment: .center) {
-          Text("Social Rank:")
-            .bold()
+      ScrollView {
+        
+        
+        VStack(alignment: .leading) {
+          HStack(alignment: .center) {
+            Text("Social Rank:")
+              .bold()
+            
+            Spacer()
+            
+            StarRatingView(socialRank: recipe.socialRank)
+              .foregroundStyle(.yellow)
+              .padding(.top, 8)
+          }
           
-          Spacer()
+          IngredientsListView(recipe: recipe)
           
-          StarRatingView(socialRank: recipe.socialRank)
-            .foregroundStyle(.yellow)
-            .padding(.top, 8)
         }
+        .padding(.horizontal, 16)
         
-        IngredientsListView(recipe: recipe)
-        
-        Spacer()
-        
-        Link(destination: recipe.sourceURL) {
-          Text("View Full Recipe")
-            .font(.headline)
-            .foregroundStyle(.blue)
-            .frame(maxWidth: .infinity)
-            .frame(height: 50)
-            .background(Color.gray.opacity(0.2))
-            .clipShape(RoundedRectangle(cornerRadius: 4))
-        }
-        .buttonStyle(.plain)
       }
+      
+      Spacer()
+      
+      Link(destination: recipe.sourceURL) {
+        Text("View Full Recipe")
+          .font(.headline)
+          .foregroundStyle(.blue)
+          .frame(maxWidth: .infinity)
+          .frame(height: 50)
+          .background(Color.gray.opacity(0.2))
+          .clipShape(RoundedRectangle(cornerRadius: 4))
+      }
+      .buttonStyle(.plain)
       .padding(.horizontal, 16)
-      .frame(maxWidth: .infinity)
       
     }
+    .frame(maxWidth: .infinity)
   }
 }
 

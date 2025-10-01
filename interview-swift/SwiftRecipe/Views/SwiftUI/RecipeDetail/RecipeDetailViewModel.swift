@@ -8,6 +8,8 @@ final class RecipeDetailViewModel: ObservableObject {
   
   @Published var isLoading: Bool = false
   @Published var recipeDetails: Recipe?
+  @Published var isErrorAlertShown: Bool = false
+  @Published var errorMessage: String?
   
   init(recipeId: String, service: RecipeService = RecipeService()) {
     self.recipeId = recipeId
@@ -27,6 +29,8 @@ final class RecipeDetailViewModel: ObservableObject {
       isLoading = false
     } catch {
       isLoading = false
+      isErrorAlertShown = true
+      errorMessage = "Something went wrong. Tap to retry fetch of the recipe details."
       print(error)
     }
     
