@@ -71,11 +71,11 @@ final class RecipeListViewModel: ObservableObject {
           )
         }
       } catch {
-        // Could it be an existing issue with the API? when the search matches it returns a 200, but when the query is incomplete or wrong it returns a badrequest error.
+        // Could it be an existing issue with the API? when the search matches it returns a 200, but when the query is incomplete or wrong it returns a badrequest error. That is why I am forcing the message.
         await MainActor.run { [weak self] in
           self?.state = .init(
             isLoading: false,
-            statusMessage: error.localizedDescription,
+            statusMessage: "No results for \(trimmedSearch)",
             recipes: []
           )
         }

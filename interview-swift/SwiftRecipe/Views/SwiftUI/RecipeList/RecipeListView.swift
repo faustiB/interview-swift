@@ -17,7 +17,11 @@ struct RecipeListView: View {
             } else if viewModel.recipeSearchQuery.isEmpty {
               Color.clear
             } else if let statusMessage = viewModel.state.statusMessage {
-              // no search found --> status message
+              HStack {
+                Text(statusMessage)
+                  .font(.body)
+              }
+              .frame(maxWidth: .infinity)
             } else {
               List (viewModel.state.recipes) { recipe in
                 NavigationLink {
