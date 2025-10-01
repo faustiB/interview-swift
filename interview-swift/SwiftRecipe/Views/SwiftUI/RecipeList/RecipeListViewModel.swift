@@ -70,8 +70,15 @@ final class RecipeListViewModel: ObservableObject {
             recipes: recipes
           )
         }
-      } catch let error as RecipeService.APIError {
+      } catch {
         // Could it be an existing issue with the API? when the search matches it returns a 200, but when the query is incomplete or wrong it returns a badrequest error.
+        await MainActor.run { [weak self] in
+          self?.state = .init(
+            isLoading: false,
+            statusMessage: error.localizedDescription,
+            recipes: []
+          )
+        }
         print(error)
       }
       
