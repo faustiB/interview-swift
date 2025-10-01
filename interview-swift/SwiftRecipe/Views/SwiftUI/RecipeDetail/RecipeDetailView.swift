@@ -44,8 +44,6 @@ struct RecipeDetailsInfoView: View {
       RecipeHeroImage(recipe: recipe)
       
       ScrollView {
-        
-        
         VStack(alignment: .leading) {
           HStack(alignment: .center) {
             Text("Social Rank:")
@@ -59,7 +57,6 @@ struct RecipeDetailsInfoView: View {
           }
           
           IngredientsListView(recipe: recipe)
-          
         }
         .padding(.horizontal, 16)
         

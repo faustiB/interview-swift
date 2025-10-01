@@ -73,4 +73,24 @@ final class RecipeListViewModelTests: XCTestCase {
     XCTAssertEqual(sut.state.recipes.count == 0, true)
     XCTAssertEqual(sut.state.statusMessage, "No results for pizza")
   }
+  
+  func testSearchRecipesOnError() async throws {
+    MockURLProtocol.requestHandler = { request in
+      let json = ""
+      let url = URL(string: "https://forkify-api.herokuapp.com/api/search?q=pizz")!
+      let response = HTTPURLResponse(url: url, statusCode: 400, httpVersion: nil, headerFields: nil)!
+      return (response, json.data(using: .utf8)!)
+    }
+    
+    let sut = RecipeListViewModel()
+    await MainActor.run {
+      sut.searchRecipes(recipeSearchQuery: "pizz")
+    }
+    
+    try await Task.sleep(nanoseconds: 200_000_000)
+    
+    XCTAssertEqual(sut.state.isLoading, false)
+    XCTAssertEqual(sut.state.statusMessage, "No results for pizz")
+    XCTAssertEqual(sut.state.recipes.count == 0, true)
+  }
 }

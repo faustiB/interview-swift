@@ -59,10 +59,7 @@ final class RecipeListViewModel: ObservableObject {
         let search = try await recipeService.searchRecipe(query: trimmedSearch)
         let recipes = search.recipes
         let count = search.count
-        
-        print("Recipes: \(recipes)")
-        print("Count: \(count)")
-        
+
         await MainActor.run { [weak self] in
           self?.state = .init(
             isLoading: false,
