@@ -26,7 +26,7 @@ struct RecipeDetailsInfoView: View {
   let recipe: Recipe
   
   var body: some View {
-    ScrollView {
+    VStack {
       RecipeHeroImage(recipe: recipe)
       
       VStack(alignment: .leading) {
@@ -41,17 +41,20 @@ struct RecipeDetailsInfoView: View {
             .padding(.top, 8)
         }
         
-        Text("Ingredients:")
-          .bold()
-          .padding(.top, 8)
+        IngredientsListView(recipe: recipe)
         
-        if let ingredients = recipe.ingredients {
-          ForEach(ingredients, id: \.self) { ingredient in
-            Text("- \(ingredient)")
-              .lineLimit(2)
-          }
-          .padding(.leading, 16)
+        Spacer()
+        
+        Link(destination: recipe.sourceURL) {
+          Text("View Full Recipe")
+            .font(.headline)
+            .foregroundStyle(.blue)
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color.gray.opacity(0.2))
+            .clipShape(RoundedRectangle(cornerRadius: 4))
         }
+        .buttonStyle(.plain)
       }
       .padding(.horizontal, 16)
       .frame(maxWidth: .infinity)
@@ -123,6 +126,24 @@ struct StarRatingView: View {
       return "star.leadinghalf.filled"
     } else {
       return "star"
+    }
+  }
+}
+
+struct IngredientsListView: View {
+  let recipe: Recipe
+  
+  var body: some View {
+    Text("Ingredients:")
+      .bold()
+      .padding(.top, 8)
+    
+    if let ingredients = recipe.ingredients {
+      ForEach(ingredients, id: \.self) { ingredient in
+        Text("- \(ingredient)")
+          .lineLimit(2)
+      }
+      .padding(.leading, 16)
     }
   }
 }
