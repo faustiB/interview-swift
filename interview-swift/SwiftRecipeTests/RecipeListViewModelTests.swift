@@ -1,7 +1,7 @@
 import XCTest
 @testable import SwiftRecipe
 
-final class SwiftRecipeTests: XCTestCase {
+final class RecipeListViewModelTests: XCTestCase {
   
   override func setUpWithError() throws {
     try super.setUpWithError()
@@ -15,10 +15,7 @@ final class SwiftRecipeTests: XCTestCase {
     URLProtocol.unregisterClass(MockURLProtocol.self)
     super.tearDown()
   }
-  
-  func testExample() throws {
-  }
-  
+    
   func testInitialStateDefault() {
     let sut = RecipeListViewModel()
     
