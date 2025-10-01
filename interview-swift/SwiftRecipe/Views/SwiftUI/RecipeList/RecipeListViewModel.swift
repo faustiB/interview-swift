@@ -10,12 +10,7 @@ final class RecipeListViewModel: ObservableObject {
   private var cancellables = Set<AnyCancellable>()
   // Task to perform the search async.
   private var searchTask: Task<Void, Error>?
-  
-  // TODO: - #2:  In RecipeListViewModel: publish search results to the RecipeListView using the
-  //  RecipeService. The screen should show a blank page when the query is empty, a loading
-  //  indicator while the page is loading, and a list of results when the repository returns data.
-  //  See the screenshots in README.md.
-  
+
   @Published var state: State = .default
   @Published var recipeSearchQuery: String = ""
   

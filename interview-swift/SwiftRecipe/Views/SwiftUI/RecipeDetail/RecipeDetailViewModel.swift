@@ -1,8 +1,6 @@
 
 import Foundation
 
-//TODO: - #4 Implement Details ViewModel using RecipeService
-
 @MainActor
 final class RecipeDetailViewModel: ObservableObject {
   private let recipeId: String

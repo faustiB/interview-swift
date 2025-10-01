@@ -8,10 +8,6 @@ struct RecipeListView: View {
 
     var body: some View {
         NavigationView {
-            // TODO: - #3: Display a search bar and a list of results.
-            //  - perform the search using the view model
-            //  - The view should match the image in screenshots/swiftui_search_results.png
-          
           Group {
             if viewModel.recipeSearchQuery.isEmpty {
               Color.clear

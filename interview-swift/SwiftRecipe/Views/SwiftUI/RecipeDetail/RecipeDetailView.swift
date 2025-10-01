@@ -1,8 +1,6 @@
 
 import SwiftUI
 
-//TODO: - #5 Implement the Details screen using RecipeDetailViewModel
-
 struct RecipeDetailView: View {
   @ObservedObject var viewModel: RecipeDetailViewModel
   
